@@ -227,12 +227,12 @@ module Wiki
       last_modified = last_modified.try(:to_time) || last_modified
       last_modified = last_modified.try(:httpdate) || last_modified
 
-      if @user && !@user.anonymous?
+      if logged_in?
         # Always private mode if user is logged in
         opts[:private] = true
 
         # Special etag for authenticated user
-        opts[:etag] = md5("#{@user.name}#{opts[:etag]}") if opts[:etag]
+        opts[:etag] = md5("#{user.name}#{opts[:etag]}") if opts[:etag]
       end
 
       if opts[:etag]
@@ -323,6 +323,10 @@ module Wiki
         output = doc.to_xhtml(:encoding => 'UTF-8')
       end
       output
+    end
+
+    def logged_in?
+      user && !user.anonimous?
     end
   end
 

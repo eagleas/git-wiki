@@ -13,11 +13,7 @@ module Wiki
 
     def user=(user)
       @user = user
-      if user && !user.anonymous?
-        session[:user] = user
-      else
-        session.delete(:user)
-      end
+      logged_in? ? session[:user]=user : session.delete(:user)
     end
 
     def initialize(app = nil, opts = {})
